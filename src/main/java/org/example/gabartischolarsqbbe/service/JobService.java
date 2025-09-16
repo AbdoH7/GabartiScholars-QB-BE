@@ -90,6 +90,16 @@ public class JobService {
     }
     
     /**
+     * Check if job exists by code
+     * @param code the job code
+     * @return true if job exists, false otherwise
+     */
+    @Transactional(readOnly = true)
+    public boolean jobExistsByCode(String code) {
+        return jobRepository.findByCode(code).isPresent();
+    }
+    
+    /**
      * Convert Job entity to JobResponse DTO
      * @param job the job entity
      * @return JobResponse DTO

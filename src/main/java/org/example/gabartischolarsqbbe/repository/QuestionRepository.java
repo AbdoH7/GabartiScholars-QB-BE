@@ -10,24 +10,24 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     
     /**
-     * Find all questions by job title ID
-     * @param jobTitleId the job title ID
-     * @return list of questions for the given job title
+     * Find all questions by job code
+     * @param jobCode the job code
+     * @return list of questions for the given job code
      */
-    List<Question> findByJobTitleId(Long jobTitleId);
+    List<Question> findByJobCode(String jobCode);
     
     /**
-     * Find questions by job title ID and difficulty
-     * @param jobTitleId the job title ID
+     * Find questions by job code and difficulty
+     * @param jobCode the job code
      * @param difficulty the difficulty level
      * @return list of questions matching the criteria
      */
-    List<Question> findByJobTitleIdAndDifficulty(Long jobTitleId, Integer difficulty);
+    List<Question> findByJobCodeAndDifficulty(String jobCode, Integer difficulty);
     
     /**
-     * Count questions by job title ID
-     * @param jobTitleId the job title ID
-     * @return number of questions for the given job title
+     * Count questions by job code
+     * @param jobCode the job code
+     * @return number of questions for the given job code
      */
-    long countByJobTitleId(Long jobTitleId);
+    long countByJobCode(String jobCode);
 }

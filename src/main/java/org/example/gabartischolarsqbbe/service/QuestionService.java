@@ -31,7 +31,7 @@ public class QuestionService {
     
     /**
      * Process CSV file and save questions to database
-     * CSV format: question_text,difficulty,job_title_id,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
+     * CSV format: question_text,difficulty,job_code,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
      * @param file the CSV file to process
      * @return CsvUploadResponse with processing results
      */
@@ -63,11 +63,11 @@ public class QuestionService {
                 try {
                     Question question = parseRecordToQuestion(record);
                     
-                    // Validate job title exists
-                    if (!jobService.jobExists(question.getJobTitleId())) {
+                    // Validate job code exists
+                    if (!jobService.jobExistsByCode(question.getJobCode())) {
                         failed++;
-                        errorMessages.append("Row ").append(i + 1).append(": Job ID ")
-                                .append(question.getJobTitleId()).append(" does not exist. ");
+                        errorMessages.append("Row ").append(i + 1).append(": Job code ")
+                                .append(question.getJobCode()).append(" does not exist. ");
                         continue;
                     }
                     
@@ -96,7 +96,7 @@ public class QuestionService {
     
     /**
      * Parse a CSV record to Question entity
-     * Expected format: question_text,difficulty,job_title_id,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
+     * Expected format: question_text,difficulty,job_code,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
      */
     private Question parseRecordToQuestion(String[] record) {
         if (record.length < 11) {
@@ -106,7 +106,7 @@ public class QuestionService {
         try {
             String questionText = record[0].trim();
             Integer difficulty = Integer.parseInt(record[1].trim());
-            Long jobTitleId = Long.parseLong(record[2].trim());
+            String jobCode = record[2].trim();
             
             if (questionText.isEmpty()) {
                 throw new IllegalArgumentException("Question text cannot be empty");
@@ -114,6 +114,10 @@ public class QuestionService {
             
             if (difficulty < 1 || difficulty > 10) {
                 throw new IllegalArgumentException("Difficulty must be between 1 and 10");
+            }
+            
+            if (jobCode.isEmpty()) {
+                throw new IllegalArgumentException("Job code cannot be empty");
             }
             
             // Parse MCQ options
@@ -143,7 +147,7 @@ public class QuestionService {
                 throw new IllegalArgumentException("At least one MCQ option must be marked as correct");
             }
             
-            return new Question(questionText, difficulty, jobTitleId, mcqOptions);
+            return new Question(questionText, difficulty, jobCode, mcqOptions);
             
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid number format in CSV record");
@@ -175,18 +179,18 @@ public class QuestionService {
     }
     
     /**
-     * Get all questions by job title ID
+     * Get all questions by job code
      */
     @Transactional(readOnly = true)
-    public List<Question> getQuestionsByJobTitleId(Long jobTitleId) {
-        return questionRepository.findByJobTitleId(jobTitleId);
+    public List<Question> getQuestionsByJobCode(String jobCode) {
+        return questionRepository.findByJobCode(jobCode);
     }
     
     /**
-     * Get questions count by job title ID
+     * Get questions count by job code
      */
     @Transactional(readOnly = true)
-    public long getQuestionsCountByJobTitleId(Long jobTitleId) {
-        return questionRepository.countByJobTitleId(jobTitleId);
+    public long getQuestionsCountByJobCode(String jobCode) {
+        return questionRepository.countByJobCode(jobCode);
     }
 }
