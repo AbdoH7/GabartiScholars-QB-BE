@@ -52,6 +52,9 @@ public class QuestionService {
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             List<String[]> records = csvReader.readAll();
             
+            if (records.isEmpty()) {
+                return new CsvUploadResponse(0, 0, 0, "CSV file contains no records.");
+            }
             // Skip header row if exists
             boolean hasHeader = isHeaderRow(records.get(0));
             int startIndex = hasHeader ? 1 : 0;
