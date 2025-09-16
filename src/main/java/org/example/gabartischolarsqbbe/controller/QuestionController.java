@@ -29,8 +29,8 @@ public class QuestionController {
      * POST /api/questions/upload-csv
      * Multipart form data with file field named "file"
      * 
-     * CSV format: question_text,difficulty,job_title_id,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
-     * Example CSV row: "What is Java?,5,1,Programming Language,true,Database,false,Operating System,false,Web Browser,false"
+     * CSV format: question_text,difficulty,job_code,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
+     * Example CSV row: "What is Java?,5,DEV001,Programming Language,true,Database,false,Operating System,false,Web Browser,false"
      */
     @PostMapping("/upload-csv")
     public ResponseEntity<ApiResponse<CsvUploadResponse>> uploadCsvFile(@RequestParam("file") MultipartFile file) {
