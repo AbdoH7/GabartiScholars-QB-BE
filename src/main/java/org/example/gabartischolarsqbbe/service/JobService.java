@@ -58,17 +58,6 @@ public class JobService {
     }
     
     /**
-     * Get job by ID
-     * @param id the job ID
-     * @return Optional containing JobResponse if found
-     */
-    @Transactional(readOnly = true)
-    public Optional<JobResponse> getJobById(Long id) {
-        return jobRepository.findById(id)
-                .map(this::convertToJobResponse);
-    }
-    
-    /**
      * Get job by code
      * @param code the job code
      * @return Optional containing JobResponse if found
@@ -77,16 +66,6 @@ public class JobService {
     public Optional<JobResponse> getJobByCode(String code) {
         return jobRepository.findByCode(code)
                 .map(this::convertToJobResponse);
-    }
-    
-    /**
-     * Check if job exists by ID
-     * @param id the job ID
-     * @return true if job exists, false otherwise
-     */
-    @Transactional(readOnly = true)
-    public boolean jobExists(Long id) {
-        return jobRepository.existsById(id);
     }
     
     /**

@@ -62,27 +62,6 @@ public class JobController {
     }
     
     /**
-     * Get job by ID
-     * GET /api/jobs/{id}
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<JobResponse>> getJobById(@PathVariable Long id) {
-        try {
-            Optional<JobResponse> jobResponse = jobService.getJobById(id);
-            if (jobResponse.isPresent()) {
-                ApiResponse<JobResponse> response = ApiResponse.success("Job retrieved successfully", jobResponse.get());
-                return ResponseEntity.ok(response);
-            } else {
-                ApiResponse<JobResponse> response = ApiResponse.error("Job not found with ID: " + id);
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            ApiResponse<JobResponse> response = ApiResponse.error("An error occurred while retrieving the job");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-    
-    /**
      * Get job by code
      * GET /api/jobs/code/{code}
      */
