@@ -1,7 +1,7 @@
 package org.example.gabartischolarsqbbe.controller;
-
+import org.example.gabaritscholarsqbbe.dto.UserResponseDTO;
 import org.example.gabartischolarsqbbe.dto.LoginRequest;
-import org.example.gabartischolarsqbbe.dto.SignupRequest;
+import org.example.gabartischolarsqbbe.payload.SignupRequest;
 import org.example.gabartischolarsqbbe.entity.User;
 import org.example.gabartischolarsqbbe.service.AuthService;
 import org.example.gabartischolarsqbbe.config.JwtUtil;
@@ -25,11 +25,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
         try {
-            User user = authService.registerUser(
-                signupRequest.getUsername(),
-                signupRequest.getEmail(),
-                signupRequest.getPassword()
-            );
+            User user = authService.registerUser(signupRequest);
 
             String token = jwtUtil.generateToken(user.getUsername());
 
@@ -59,12 +55,13 @@ public class AuthController {
 
             String token = jwtUtil.generateToken(user.getUsername());
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Login successful!");
-            response.put("userId", user.getId());
-            response.put("username", user.getUsername());
-            response.put("email", user.getEmail());
-            response.put("token", token);
+            UserResponseDTO response = new UserResponseDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                token
+            );
+            return ResponseEntity.ok(response);
 
             return ResponseEntity.ok(response);
 

@@ -1,4 +1,4 @@
-package org.example.gabartischolarsqbbe.config;
+package org.example.gabartischolarsqbbe.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
