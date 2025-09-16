@@ -28,10 +28,9 @@ public class Question {
     @Column(name = "difficulty", nullable = false)
     private Integer difficulty;
     
-    @NotBlank(message = "Job code is required")
-    @Size(max = 50, message = "Job code must not exceed 50 characters")
-    @Column(name = "job_code", nullable = false)
-    private String jobCode;
+    @NotNull(message = "Job title ID is required")
+    @Column(name = "job_title_id", nullable = false)
+    private Long jobTitleId;
     
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "mcqs", columnDefinition = "JSON")
@@ -42,10 +41,10 @@ public class Question {
     }
     
     // Constructor with parameters
-    public Question(String questionText, Integer difficulty, String jobCode, List<McqOption> mcqs) {
+    public Question(String questionText, Integer difficulty, Long jobTitleId, List<McqOption> mcqs) {
         this.questionText = questionText;
         this.difficulty = difficulty;
-        this.jobCode = jobCode;
+        this.jobTitleId = jobTitleId;
         this.mcqs = mcqs;
     }
     
@@ -74,12 +73,12 @@ public class Question {
         this.difficulty = difficulty;
     }
     
-    public String getJobCode() {
-        return jobCode;
+    public Long getJobTitleId() {
+        return jobTitleId;
     }
     
-    public void setJobCode(String jobCode) {
-        this.jobCode = jobCode;
+    public void setJobTitleId(Long jobTitleId) {
+        this.jobTitleId = jobTitleId;
     }
     
     public List<McqOption> getMcqs() {
@@ -96,7 +95,7 @@ public class Question {
                 "id=" + id +
                 ", questionText='" + questionText + '\'' +
                 ", difficulty=" + difficulty +
-                ", jobCode='" + jobCode + '\'' +
+                ", jobTitleId=" + jobTitleId +
                 ", mcqs=" + mcqs +
                 '}';
     }

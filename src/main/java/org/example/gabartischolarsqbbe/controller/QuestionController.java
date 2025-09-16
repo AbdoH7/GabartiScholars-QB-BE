@@ -29,8 +29,8 @@ public class QuestionController {
      * POST /api/questions/upload-csv
      * Multipart form data with file field named "file"
      * 
-     * CSV format: question_text,difficulty,job_code,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
-     * Example CSV row: "What is Java?,5,SD001,Programming Language,true,Database,false,Operating System,false,Web Browser,false"
+     * CSV format: question_text,difficulty,job_title_id,option1,option1_correct,option2,option2_correct,option3,option3_correct,option4,option4_correct
+     * Example CSV row: "What is Java?,5,1,Programming Language,true,Database,false,Operating System,false,Web Browser,false"
      */
     @PostMapping("/upload-csv")
     public ResponseEntity<ApiResponse<CsvUploadResponse>> uploadCsvFile(@RequestParam("file") MultipartFile file) {
@@ -58,13 +58,13 @@ public class QuestionController {
     }
     
     /**
-     * Get questions by job code
-     * GET /api/questions/job/{jobCode}
+     * Get questions by job title ID
+     * GET /api/questions/job/{jobTitleId}
      */
-    @GetMapping("/job/{jobCode}")
-    public ResponseEntity<ApiResponse<List<Question>>> getQuestionsByJobCode(@PathVariable String jobCode) {
+    @GetMapping("/job/{jobTitleId}")
+    public ResponseEntity<ApiResponse<List<Question>>> getQuestionsByJobTitleId(@PathVariable Long jobTitleId) {
         try {
-            List<Question> questions = questionService.getQuestionsByJobCode(jobCode);
+            List<Question> questions = questionService.getQuestionsByJobTitleId(jobTitleId);
             ApiResponse<List<Question>> response = ApiResponse.success("Questions retrieved successfully", questions);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
