@@ -1,7 +1,6 @@
 package org.example.gabartischolarsqbbe.controller;
 import org.example.gabaritscholarsqbbe.dto.UserResponseDTO;
 import org.example.gabartischolarsqbbe.dto.LoginRequest;
-import org.example.gabartischolarsqbbe.payload.SignupRequest;
 import org.example.gabartischolarsqbbe.entity.User;
 import org.example.gabartischolarsqbbe.service.AuthService;
 import org.example.gabartischolarsqbbe.config.JwtUtil;
