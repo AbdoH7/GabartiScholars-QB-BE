@@ -1,6 +1,7 @@
 package org.example.gabartischolarsqbbe.service;
 
-import org.example.gabartischolarsqbbe.dto.JobRequest;
+import org.example.gabartischolarsqbbe.dto.CreateJobRequest;
+import org.example.gabartischolarsqbbe.dto.UpdateJobRequest;
 import org.example.gabartischolarsqbbe.dto.JobResponse;
 import org.example.gabartischolarsqbbe.entity.Job;
 import org.example.gabartischolarsqbbe.repository.JobRepository;
@@ -25,18 +26,18 @@ public class JobService {
     
     /**
      * Create a new job
-     * @param jobRequest the job request containing name and code
+     * @param createJobRequest the job request containing name, code, and optional fields
      * @return JobResponse with the created job details
      * @throws IllegalArgumentException if job code already exists
      */
-    public JobResponse createJob(JobRequest jobRequest) {
+    public JobResponse createJob(CreateJobRequest createJobRequest) {
         // Check if job code already exists
-        if (jobRepository.existsByCode(jobRequest.getCode())) {
-            throw new IllegalArgumentException("Job with code '" + jobRequest.getCode() + "' already exists");
+        if (jobRepository.existsByCode(createJobRequest.getCode())) {
+            throw new IllegalArgumentException("Job with code '" + createJobRequest.getCode() + "' already exists");
         }
         
         // Create new job entity
-        Job job = new Job(jobRequest.getName(), jobRequest.getCode());
+        Job job = new Job(createJobRequest.getName(), createJobRequest.getCode());
         
         // Save the job
         Job savedJob = jobRepository.save(job);
@@ -97,6 +98,43 @@ public class JobService {
     @Transactional(readOnly = true)
     public boolean jobExistsByCode(String code) {
         return jobRepository.existsByCode(code);
+    }
+    
+    /**
+     * Update an existing job by code
+     * @param code the job code to update
+     * @param updateJobRequest the update request containing fields to update
+     * @return JobResponse with the updated job details
+     * @throws IllegalArgumentException if job code does not exist or no updates provided
+     */
+    @Transactional
+    public JobResponse updateJobByCode(String code, UpdateJobRequest updateJobRequest) {
+        // Check if any updates are provided
+        if (!updateJobRequest.hasUpdates()) {
+            throw new IllegalArgumentException("No updates provided");
+        }
+        
+        // Find the job by code
+        Optional<Job> jobOptional = jobRepository.findByCode(code);
+        if (jobOptional.isEmpty()) {
+            throw new IllegalArgumentException("Job with code '" + code + "' does not exist");
+        }
+        
+        Job job = jobOptional.get();
+        
+        // Update fields if provided
+        if (updateJobRequest.getName() != null) {
+            job.setName(updateJobRequest.getName());
+        }
+        
+        // Note: Description and Department fields would need to be added to Job entity
+        // For now, we only update the name field
+        
+        // Save the updated job
+        Job updatedJob = jobRepository.save(job);
+        
+        // Convert to response DTO
+        return convertToJobResponse(updatedJob);
     }
     
     /**

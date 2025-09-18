@@ -2,7 +2,8 @@ package org.example.gabartischolarsqbbe.controller;
 
 import jakarta.validation.Valid;
 import org.example.gabartischolarsqbbe.dto.ApiResponse;
-import org.example.gabartischolarsqbbe.dto.JobRequest;
+import org.example.gabartischolarsqbbe.dto.CreateJobRequest;
+import org.example.gabartischolarsqbbe.dto.UpdateJobRequest;
 import org.example.gabartischolarsqbbe.dto.JobResponse;
 import org.example.gabartischolarsqbbe.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,12 @@ public class JobController {
     /**
      * Create a new job
      * POST /api/jobs
-     * Request body: {"name": "Software Developer", "code": "SD001"}
+     * Request body: {"name": "Software Developer", "code": "DEV001", "description": "Optional description", "department": "IT"}
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<JobResponse>> createJob(@Valid @RequestBody JobRequest jobRequest) {
+    public ResponseEntity<ApiResponse<JobResponse>> createJob(@Valid @RequestBody CreateJobRequest createJobRequest) {
         try {
-            JobResponse jobResponse = jobService.createJob(jobRequest);
+            JobResponse jobResponse = jobService.createJob(createJobRequest);
             ApiResponse<JobResponse> response = ApiResponse.success("Job created successfully", jobResponse);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
@@ -99,6 +100,26 @@ public class JobController {
             }
         } catch (Exception e) {
             ApiResponse<JobResponse> response = ApiResponse.error("An error occurred while retrieving the job");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    
+    /**
+     * Update job by code
+     * PUT /api/jobs/code/{code}
+     * Request body: {"name": "Updated Job Name", "description": "Updated description", "department": "Updated department"}
+     */
+    @PutMapping("/code/{code}")
+    public ResponseEntity<ApiResponse<JobResponse>> updateJobByCode(@PathVariable String code, @Valid @RequestBody UpdateJobRequest updateJobRequest) {
+        try {
+            JobResponse jobResponse = jobService.updateJobByCode(code, updateJobRequest);
+            ApiResponse<JobResponse> response = ApiResponse.success("Job updated successfully", jobResponse);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            ApiResponse<JobResponse> response = ApiResponse.error(e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        } catch (Exception e) {
+            ApiResponse<JobResponse> response = ApiResponse.error("An error occurred while updating the job");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }

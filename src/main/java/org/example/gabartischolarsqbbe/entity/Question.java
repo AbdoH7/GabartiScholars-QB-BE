@@ -98,43 +98,7 @@ public class Question {
                 ", jobTitleId=" + jobTitleId +
                 ", mcqs=" + mcqs +
                 '}';
-    }
-    
-    // Inner class for MCQ options
-    public static class McqOption {
-        private String value;
-        private Boolean correct;
-        
-        public McqOption() {
+
+            }
         }
         
-        public McqOption(String value, Boolean correct) {
-            this.value = value;
-            this.correct = correct;
-        }
-        
-        public String getValue() {
-            return value;
-        }
-        
-        public void setValue(String value) {
-            this.value = value;
-        }
-        
-        public Boolean getCorrect() {
-            return correct;
-        }
-        
-        public void setCorrect(Boolean correct) {
-            this.correct = correct;
-        }
-        
-        @Override
-        public String toString() {
-            return "McqOption{" +
-                    "value='" + value + '\'' +
-                    ", correct=" + correct +
-                    '}';
-        }
-    }
-}
